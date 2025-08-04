@@ -1,44 +1,70 @@
-# 
-
 import os
 import json
-from sklearn.metrics import classification_report
-from clip_classifier import average_group_similarity
-from prompt_sets import get_baseline_prompts
+from tqdm import tqdm
+from clip_classifier import compute_similarity, encode_prompts
+import matplotlib.pyplot as plt
 
-def classify_image(similarity_dict, real_groups, fake_groups):
-    real_score = sum(similarity_dict[g]["mean"] for g in real_groups) / len(real_groups)
-    fake_score = sum(similarity_dict[g]["mean"] for g in fake_groups) / len(fake_groups)
-    return 0 if real_score > fake_score else 1
+def evaluate_prompt_type(dataset_dir, prompt_type_dict, save_path):
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
 
-def evaluate_dataset(dataset_dir, prompt_groups, real_groups, fake_groups):
+    real_prompts = prompt_type_dict["real"]
+    fake_prompts = prompt_type_dict["fake"]
+    encoded_real = encode_prompts(real_prompts)
+    encoded_fake = encode_prompts(fake_prompts)
+
     results = []
+    score_diffs = []
+
     for label_str in ["real", "fake"]:
         label = 0 if label_str == "real" else 1
         folder = os.path.join(dataset_dir, label_str)
-        for img in os.listdir(folder):
+        image_list = os.listdir(folder)
+
+        for img in tqdm(image_list, desc=f"{label_str.upper()} images"):
             path = os.path.join(folder, img)
-            sims = average_group_similarity(path, prompt_groups)
-            pred = classify_image(sims, real_groups, fake_groups)
-            results.append({"filename": img, "true": label, "pred": pred, "scores": sims})
+
+            real_scores = compute_similarity(path, encoded_real)
+            fake_scores = compute_similarity(path, encoded_fake)
+
+            real_score = real_scores.mean()
+            fake_score = fake_scores.mean()
+            margin = fake_score - real_score
+            pred = 1 if margin > 0 else 0
+
+            top_real_idx = real_scores.argmax()
+            top_fake_idx = fake_scores.argmax()
+
+            top_real_prompt = real_prompts[top_real_idx]
+            top_fake_prompt = fake_prompts[top_fake_idx]
+
+            results.append({
+                "filename": img,
+                "true": label,
+                "pred": pred,
+                "real_score": float(real_score),
+                "fake_score": float(fake_score),
+                "score_margin": float(margin),
+                "top_real_prompt": top_real_prompt,
+                "top_fake_prompt": top_fake_prompt,
+                "top_real_score": float(real_scores[top_real_idx]),
+                "top_fake_score": float(fake_scores[top_fake_idx])
+            })
+
+            # Save intermediate results
+            with open(save_path, "w") as f:
+                json.dump(results, f, indent=2)
+
+            score_diffs.append(margin)
+
+    # Plot histogram of score margins
+    plt.hist(score_diffs, bins=40, color='skyblue', edgecolor='black')
+    plt.axvline(0, color='red', linestyle='--', label='Decision Boundary')
+    plt.title("Fake - Real Similarity Score Differences")
+    plt.xlabel("Score Difference")
+    plt.ylabel("Number of Images")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(save_path.replace(".json", "_margin_hist.png"))
+    plt.close()
+
     return results
-
-def main():
-    prompts = get_baseline_prompts()
-    dataset_dir = "./Dataset"
-    real_groups = ["generic", "technical"]  # example
-    fake_groups = ["forensic", "layman"]
-
-    results = evaluate_dataset(dataset_dir, prompts, real_groups, fake_groups)
-
-    # Save results
-    with open("results.json", "w") as f:
-        json.dump(results, f, indent=2)
-
-    # Compute metrics
-    y_true = [r["true"] for r in results]
-    y_pred = [r["pred"] for r in results]
-    print(classification_report(y_true, y_pred, target_names=["Real", "Fake"]))
-
-if __name__ == "__main__":
-    main()
