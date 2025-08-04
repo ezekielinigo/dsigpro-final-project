@@ -114,7 +114,7 @@ def get_chatgpt4o_prompts():
 
 def get_chatgpt4pt5_prompts():
     return {
-        "generic": { 
+        "generic": {
 			"real": [
 				"warm gaze",
 				"natural smile",
@@ -298,16 +298,184 @@ def get_deepseekr1_prompts():
 
 def get_gemini2pt5pro_prompts():
     return {
-        "generic": [...],
-        "technical": [...],
-        "forensic": [...],
-        "layman": [...]
+        "generic": {
+			"real": [
+				"Natural light",
+				"Real skin texture",
+				"Slight asymmetry",
+				"Genuine emotion",
+				"Expressive eyes",
+				"Fine hair strands",
+				"Normal blemishes",
+				"Warm skin tone"
+			],
+			"fake": [
+				"Uncanny look",
+				"Plastic skin",
+				"Too perfect",
+				"Strange artifacts",
+				"Vacant stare",
+				"Melted hair",
+				"Odd background",
+				"Flat lighting"
+			]
+		},
+        "technical": {
+			"real": [
+				"Natural skin texture and pores",
+				"Fine vellus hair details",
+				"Consistent global illumination",
+				"Coherent shadows and highlights",
+				"Natural color space gradients",
+				"Sharp, detailed eye reflections",
+				"Organic depth of field",
+				"Subtle, natural facial asymmetry"
+			],
+			"fake": [
+				"Unnatural waxy skin smoothing",
+				"Geometric warping or distortion",
+				"Inconsistent directional lighting",
+				"Aliasing artifacts on edges",
+				"Noticeable image compression noise",
+				"Strange incoherent background patterns",
+				"Mismatched or blank eye reflections",
+				"Digital color banding artifacts"
+			]
+		},
+        "forensic": {
+			"real": [
+				"Consistent iris patterns and reflections.",
+				"Natural skin texture with fine pores.",
+				"Logically cast shadows from facial features.",
+				"Symmetrical placement of ears and eyes.",
+				"Age-appropriate skin elasticity and wrinkles.",
+				"Realistic hair follicle and strand detail.",
+				"Coherent lighting across entire facial region.",
+				"Naturally aligned teeth and gum lines."
+			],
+			"fake": [
+				"Unnatural smoothness or blurred skin textures.",
+				"Asymmetrical ear shapes and positioning.",
+				"Inconsistent lighting on facial planes.",
+				"Distorted background elements near the head.",
+				"Mismatched iris patterns or pupil details.",
+				"Illogical hair strands or hairline blending.",
+				"Anomalous or warped spectacle frames.",
+				"Perfectly uniform, unnatural teeth structure."
+			]
+		},
+        "layman": {
+			"real": [
+				"this looks like a real person",
+				"seems natural and authentic to me",
+				"just a normal, everyday photo",
+				"nothing seems out of place here",
+				"yep, this is a genuine picture",
+				"looks like a totally normal selfie",
+				"this person definitely seems real",
+				"I believe this is a real photo"
+			],
+			"fake": [
+				"this looks kinda weird to me",
+				"something about this face feels off",
+				"hmm, this doesn't look quite right",
+				"getting a weird vibe from this photo",
+				"this feels a little fake or edited",
+				"the eyes look a little strange",
+				"is this even a real person?",
+				"this has that weird AI look"
+			]
+		}
     }
 
 def get_claudesonnet4_prompts():
     return {
-        "generic": [...],
-        "technical": [...],
-        "forensic": [...],
-        "layman": [...]
+        "generic": {
+			"real": [
+				"natural skin",
+				"lived expression",
+				"genuine smile",
+				"weathered features",
+				"asymmetric face",
+				"warm eyes",
+				"subtle imperfections",
+				"human warmth"
+			],
+			"fake": [
+				"uncanny valley",
+				"plastic appearance",
+				"hollow stare",
+				"artificial smoothness",
+				"strange proportions",
+				"lifeless expression",
+				"eerie perfection",
+				"robotic features"
+			]
+		},
+        "technical": {
+			"real": [
+				"natural skin texture variations",
+				"consistent lighting across features",
+				"smooth color gradients",
+				"proper shadow depth mapping",
+				"organic facial asymmetry",
+				"realistic pore detail distribution",
+				"coherent reflection patterns",
+				"natural motion blur edges"
+			],
+			"fake": [
+				"compression artifacts around eyes",
+				"aliasing at hair boundaries",
+				"temporal flickering between frames",
+				"inconsistent illumination mapping",
+				"blocky pixel transitions",
+				"unnatural color bleeding",
+				"geometric distortion patterns",
+				"pixelated edge discontinuities"
+			]
+		},
+        "forensic": {
+			"real": [
+				"consistent facial proportions and symmetry",
+				"natural skin texture with pore visibility",
+				"coherent lighting across all facial features",
+				"anatomically correct eye spacing and alignment",
+				"realistic shadow casting from nose bridge",
+				"uniform hair strand direction and thickness",
+				"proper depth perception in facial contours",
+				"natural color gradation in skin tones"
+			],
+			"fake": [
+				"misaligned pupils or iris irregularities",
+				"inconsistent lighting between facial regions",
+				"blurred boundaries around hairline edges",
+				"asymmetrical ear positioning or morphology",
+				"artificial smoothness lacking skin texture",
+				"color bleeding between adjacent facial areas",
+				"distorted facial feature proportional relationships",
+				"unnatural shadow patterns contradicting light source"
+			]
+		},
+        "layman": {
+			"real": [
+				"this looks like a real person",
+				"seems natural to me",
+				"looks totally normal",
+				"just a regular photo",
+				"nothing weird about this face",
+				"looks like someone I'd know",
+				"seems genuine and authentic",
+				"typical everyday person photo"
+			],
+			"fake": [
+				"this looks kinda weird",
+				"something feels off here",
+				"face looks too perfect somehow",
+				"eyes seem strange to me",
+				"doesn't look quite right",
+				"something about this seems fake",
+				"looks artificial or computer made",
+				"gives me uncanny valley vibes"
+			]
+		}
     }
